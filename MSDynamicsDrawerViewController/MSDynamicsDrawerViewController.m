@@ -28,6 +28,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "MSDynamicsDrawerViewController.h"
+#import <tgmath.h>
 
 //#define DEBUG_LAYOUT
 
@@ -191,7 +192,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
         [weakSelf didUpdateDynamicAnimatorAction];
     };
 }
-
+/*
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     self.animatingRotation = YES;
@@ -220,7 +221,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
     }
     return supportedInterfaceOrientations;
 }
-
+*/
 - (UIViewController *)childViewControllerForStatusBarStyle
 {
     return self.paneViewController;
@@ -369,7 +370,8 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 - (void)setDrawerViewController:(UIViewController *)drawerViewController
 {
     [self replaceViewController:self.drawerViewController withViewController:drawerViewController inContainerView:self.drawerView completion:^{
-        _drawerViewController = drawerViewController;
+        __weak typeof(self) weakSelf = self;
+	weakSelf.drawerViewController = drawerViewController;
     }];
 }
 
@@ -428,7 +430,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
     if (self.paneViewController != paneViewController) {
         [self.paneViewController willMoveToParentViewController:nil];
         [self.paneViewController beginAppearanceTransition:NO animated:animated];
-        void(^transitionToNewPaneViewController)() = ^{
+        void(^transitionToNewPaneViewController)(void) = ^{
             [paneViewController willMoveToParentViewController:self];
             [self.paneViewController.view removeFromSuperview];
             [self.paneViewController removeFromParentViewController];
@@ -438,7 +440,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
             paneViewController.view.frame = self.paneView.bounds;
             [paneViewController beginAppearanceTransition:YES animated:animated];
             [self.paneView addSubview:paneViewController.view];
-            _paneViewController = paneViewController;
+            self.paneViewController = paneViewController;
             // Force redraw of the new pane view (drastically smoothes animation)
             [self.paneView setNeedsDisplay];
             [CATransaction flush];
@@ -446,7 +448,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
             // After drawing has finished, set new pane view controller view and close
             dispatch_async(dispatch_get_main_queue(), ^{
                 __weak typeof(self) weakSelf = self;
-                _paneViewController = paneViewController;
+                weakSelf.paneViewController = paneViewController;
                 [self setPaneState:MSDynamicsDrawerPaneStateClosed animated:animated allowUserInterruption:YES completion:^{
                     [paneViewController didMoveToParentViewController:weakSelf];
                     [paneViewController endAppearanceTransition];
@@ -593,10 +595,10 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
             fraction = ((self.openStateRevealWidth - self.paneView.frame.origin.x) / self.openStateRevealWidth);
             break;
         case MSDynamicsDrawerDirectionBottom:
-            fraction = (1.0 - (fabsf(self.paneView.frame.origin.y) / self.openStateRevealWidth));
+            fraction = (1.0 - (fabs(self.paneView.frame.origin.y) / self.openStateRevealWidth));
             break;
         case MSDynamicsDrawerDirectionRight:
-            fraction = (1.0 - (fabsf(self.paneView.frame.origin.x) / self.openStateRevealWidth));
+            fraction = (1.0 - (fabs(self.paneView.frame.origin.x) / self.openStateRevealWidth));
             break;
         case MSDynamicsDrawerDirectionNone:
             fraction = 1.0; // If we have no direction, we want 1.0 since the pane is closed when it has no direction
