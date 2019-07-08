@@ -414,7 +414,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 - (void)setPaneViewController:(UIViewController *)paneViewController
 {
     [self replaceViewController:self.paneViewController withViewController:paneViewController inContainerView:self.paneView completion:^{
-        _paneViewController = paneViewController;
+        self.paneViewController = paneViewController;
         [self setNeedsStatusBarAppearanceUpdate];
     }];
 }
@@ -1266,9 +1266,9 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
         case UIGestureRecognizerStateEnded: {
             if (self.currentDrawerDirection != MSDynamicsDrawerDirectionNone) {
                 // If the user released the pane over the velocity threshold
-                if (fabsf(paneVelocity) > MSPaneViewVelocityThreshold) {
+                if (fabs(paneVelocity) > MSPaneViewVelocityThreshold) {
                     MSDynamicsDrawerPaneState state = [self paneStateForPanVelocity:paneVelocity];
-                    [self addDynamicsBehaviorsToCreatePaneState:state pushMagnitude:(fabsf(paneVelocity) * MSPaneViewVelocityMultiplier) pushAngle:[self gravityAngleForState:state direction:self.currentDrawerDirection] pushElasticity:self.elasticity];
+                    [self addDynamicsBehaviorsToCreatePaneState:state pushMagnitude:(fabs(paneVelocity) * MSPaneViewVelocityMultiplier) pushAngle:[self gravityAngleForState:state direction:self.currentDrawerDirection] pushElasticity:self.elasticity];
                 }
                 // If not released with a velocity over the threhold, update to nearest `paneState`
                 else {
