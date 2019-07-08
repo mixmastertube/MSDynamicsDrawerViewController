@@ -542,7 +542,7 @@ typedef void (^MSDynamicsDrawerActionBlock)(MSDynamicsDrawerDirection maskedValu
 /**
  Performs an action on all values within a `MSDynamicsDrawerDirection` direction bitmask.
  
- @param drawerDirection The direction bitmask.
+ @param direction The direction bitmask.
  @param action The action block that should be performed on each of the directions contained within the direction bitmask.
  
  @see MSDynamicsDrawerActionBlock
