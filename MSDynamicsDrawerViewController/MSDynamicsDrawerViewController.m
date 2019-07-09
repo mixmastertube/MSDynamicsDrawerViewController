@@ -368,7 +368,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 - (void)setDrawerViewController:(UIViewController *)drawerViewController
 {
     [self replaceViewController:self.drawerViewController withViewController:drawerViewController inContainerView:self.drawerView completion:^{
-        self.drawerViewController = drawerViewController;
+        self->_drawerViewController = drawerViewController;
     }];
 }
 
@@ -411,7 +411,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 - (void)setPaneViewController:(UIViewController *)paneViewController
 {
     [self replaceViewController:self.paneViewController withViewController:paneViewController inContainerView:self.paneView completion:^{
-        self.paneViewController = paneViewController;
+        self->_paneViewController = paneViewController;
         [self setNeedsStatusBarAppearanceUpdate];
     }];
 }
@@ -437,7 +437,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
             paneViewController.view.frame = self.paneView.bounds;
             [paneViewController beginAppearanceTransition:YES animated:animated];
             [self.paneView addSubview:paneViewController.view];
-            self.paneViewController = paneViewController;
+            self->_paneViewController = paneViewController;
             // Force redraw of the new pane view (drastically smoothes animation)
             [self.paneView setNeedsDisplay];
             [CATransaction flush];
@@ -445,7 +445,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
             // After drawing has finished, set new pane view controller view and close
             dispatch_async(dispatch_get_main_queue(), ^{
                 __weak typeof(self) weakSelf = self;
-                self.paneViewController = paneViewController;
+                self->_paneViewController = paneViewController;
                 [self setPaneState:MSDynamicsDrawerPaneStateClosed animated:animated allowUserInterruption:YES completion:^{
                     [paneViewController didMoveToParentViewController:weakSelf];
                     [paneViewController endAppearanceTransition];
