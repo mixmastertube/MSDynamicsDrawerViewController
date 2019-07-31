@@ -937,7 +937,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
     NSAssert(MSDynamicsDrawerDirectionIsValid(direction), @"Only accepts cardinal directions when querying for reveal width");
     NSNumber *revealWidth = self.revealWidth[@(direction)];
     // Default values
-    if (!revealWidth) {
+    if (![revealWidth boolValue]) {
         if (direction & MSDynamicsDrawerDirectionHorizontal) {
             revealWidth = @(MSDynamicsDrawerDefaultOpenStateRevealWidthHorizontal);
         } else if (direction & MSDynamicsDrawerDirectionVertical) {
@@ -989,7 +989,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 {
     NSAssert(MSDynamicsDrawerDirectionIsCardinal(direction), @"Only accepts singular directions when querying for drag reveal enabled");
     NSNumber *paneDragRevealEnabled = self.paneDragRevealEnabled[@(direction)];
-    if (!paneDragRevealEnabled) paneDragRevealEnabled = @(YES);
+    if (![paneDragRevealEnabled boolValue]) paneDragRevealEnabled = @(YES);
     return [paneDragRevealEnabled boolValue];
 }
 
@@ -1004,7 +1004,7 @@ void MSDynamicsDrawerDirectionActionForMaskedValues(NSInteger direction, MSDynam
 {
     NSAssert(MSDynamicsDrawerDirectionIsCardinal(direction), @"Only accepts singular directions when querying for drag reveal enabled");
     NSNumber *paneTapToCloseEnabled = self.paneTapToCloseEnabled[@(direction)];
-    if (!paneTapToCloseEnabled) paneTapToCloseEnabled = @(YES);
+    if (![paneTapToCloseEnabled boolValue]) paneTapToCloseEnabled = @(YES);
     return [paneTapToCloseEnabled boolValue];
 }
 
